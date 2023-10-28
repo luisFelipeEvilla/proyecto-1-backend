@@ -1,19 +1,7 @@
-import mongoose, { ObjectId } from "mongoose";
-import User, { userSchema } from "../models/user";
+import User from "../models/user";
+import { UserType } from "../types/user";
 
-type User = Document & {
-    first_name: string;
-    last_name: string;
-    password: string;
-    email: string;
-    phone: string;
-    address: string;
-    city: string;
-    postal_code: string;
-    role: 'client' | 'admin';
-};
-
-export async function createUser(userData: User) {
+export async function createUser(userData: UserType) {
     // check if exits any user with the same email
     const user = await User.find({ email: userData.email });
 

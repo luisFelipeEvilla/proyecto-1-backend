@@ -2,6 +2,7 @@ import { Router } from "express";
 import User from "../models/user"
 import { comparePassword } from "../utils/comparePassword";
 import { createUser, getUserByEmail } from "../controllers/user";
+import { generateJwtToken } from "../utils/generateJwtToken";
 
 const router = Router();
 
@@ -11,7 +12,10 @@ router.post("/signup", async (req, res) => {
     try {
         // todo: implement password hashing
         const user = await createUser(user_data);
-        res.send(user);
+
+       const token = generateJwtToken(user);
+
+        res.send({ token, user});
     } catch (error: any) {
         console.error("Error creating user", error);
         if ( error.name === 'ValidationError') return res.status(400).json({ error: error.message });
@@ -38,9 +42,9 @@ router.post("/signin", async (req, res) => {
         }
 
         // todo implement token generation
-       // const token = user.generateAuthToken();
+       const token = generateJwtToken(user);
 
-        res.json({ user });
+        res.json({ token, user });
     } catch (error: any) {
         console.error("Error signing in user", error);
         res.status(500).json({ error: error.message });
