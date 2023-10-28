@@ -1,4 +1,4 @@
-import mongoose, { Connection, ConnectOptions } from 'mongoose';
+import mongoose, { Connection } from 'mongoose';
 import { MONGO_URL } from '../config';
 
 const connectionString = MONGO_URL;
