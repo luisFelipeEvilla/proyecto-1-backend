@@ -6,6 +6,7 @@ export const restaurantSchema = new Schema({
     address: { type: String, required: true},
     category: { type: String, required: true},
     popularity: { type: Number, required: true, default: 0},
+    products: [{ type: Schema.Types.ObjectId, ref: 'Product' }]
 });
 
 const Restaurant = createConnection().model('Restaurant', restaurantSchema);
