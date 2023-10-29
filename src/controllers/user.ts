@@ -2,6 +2,7 @@ import { ObjectId } from "mongoose";
 import User from "../models/user";
 import { UserType } from "../types/user";
 import { ResourceNotFound } from "../errors";
+import { hashPassword } from "../utils/auth";
 
 export async function createUser(userData: UserType) {
     // check if exits any user with the same email
@@ -9,6 +10,9 @@ export async function createUser(userData: UserType) {
 
     if (user) throw new Error('User already exists');
 
+    // hash password before saving
+    userData.password = await hashPassword(userData.password);
+    
     const newUser = new User(userData);
     return await newUser.save();
 }
