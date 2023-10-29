@@ -8,7 +8,6 @@ router.get('/', async (req, res) => {
     const name = req.query.name;
 
     try {
-        console.log(categories)
         const restaurants = await getRestaurants(categories, name as string);
 
         return res.json(restaurants);

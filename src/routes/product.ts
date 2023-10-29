@@ -5,8 +5,13 @@ import { ResourceAlreadyExistsError, ResourceNotFound } from "../errors";
 const router = Router();
 
 router.get('/', async (req, res) => {
+    // restaurant es un _id de un restaurante
+    // categories es una lista de categorias, para este ejercicio son string pero en una app real deberian ser ids
+    const categories = req.query.categories?.toString().split(',');
+    const restaurant = req.query.restaurant;
+
     try {
-        const products = await getProducts();
+        const products = await getProducts(categories, restaurant as string);
         
         res.json(products);
     } catch (error: any) {

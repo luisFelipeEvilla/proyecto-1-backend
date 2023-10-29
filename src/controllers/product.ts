@@ -10,12 +10,13 @@ type productSchemaType = {
     restaurant_id: string
 }
 
-export async function getProducts(categories?: string[], name?: string) {
+export async function getProducts(categories?: string[], name?: string, restaurant?: string) {
     return await Product.find({
         // en una app real, las categorias deben ser ids y no texto, pero para simplificar el ejemplo, lo dejamos asi
         // y por eso no ignoramos mayusculas y minusculas
         ...(categories && { category: { $in: categories } }),
         ...(name && { name: { $regex: name, $options: 'i' } }),
+        ...(restaurant && { restaurant_id: restaurant }),
     });
 }
 
