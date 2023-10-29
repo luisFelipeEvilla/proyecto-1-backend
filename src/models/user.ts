@@ -20,7 +20,10 @@ export const userSchema = new Schema({
             },
             message: 'Role must be either "client" or "admin".'
         }
-    }
+    },
+    created_at: { type: Date, required: true, default: Date.now },
+    updated_at: { type: Date, required: true, default: Date.now },
+    deleted_at: { type: Date, required: false, default: null },
 });
 
 const User = createConnection().model('User', userSchema);

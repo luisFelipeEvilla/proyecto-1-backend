@@ -20,12 +20,12 @@ export async function getProducts(categories?: string[], name?: string, restaura
     });
 }
 
-export async function getProductById(id: string) {
-    return await Product.findById(id);
+export async function getProductById(_id: string) {
+    return await Product.findOne({ _id, deleted_at: null });
 }
 
 export async function getProductByName(name: string) {
-    return await Product.findOne({ name: { $regex: name, $options: 'i' } });
+    return await Product.findOne({ name: { $regex: name, $options: 'i' }, deleted_at: null });
 }
 
 export async function createProduct(productData: productSchemaType) {
@@ -44,7 +44,7 @@ export async function createProduct(productData: productSchemaType) {
 }
 
 export async function updateProduct(id: string, productData: productSchemaType) {
-    const product = await Product.findById(id);
+    const product = await getProductById(id);
 
     if (!product) throw new ResourceNotFound('Product not found');
 
@@ -54,5 +54,11 @@ export async function updateProduct(id: string, productData: productSchemaType) 
 }
 
 export async  function deleteProduct(id: string) {
-    return await Product.findByIdAndDelete(id);
+    const product = await getProductById(id);
+
+    if (!product) throw new ResourceNotFound('Product not found');
+
+    product.deleted_at = new Date();
+
+    return await product.save();
 }

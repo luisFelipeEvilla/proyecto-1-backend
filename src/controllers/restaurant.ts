@@ -15,22 +15,22 @@ export async function getRestaurants(categories?: string[], name?: string) {
         // y por eso no ignoramos mayusculas y minusculas
         ...(categories && { category: { $in: categories } }),
         ...(name && { name: { $regex: name, $options: 'i' } }),
+        deleted_at: null,
     }).sort({ popularity: -1 });
 }
 
-export async function getRestaurantById(id: string) {
-    // return await Restaurant.findById(id).populate([ { path: 'products', select: '*'}]);
-    const restaurant = await  Restaurant.findById(id).populate('products').exec();
+export async function getRestaurantById(_id: string) {
+    const restaurant = await  Restaurant.findOne({ _id, deleted_at: null});
 
     if (!restaurant) throw new ResourceNotFound('Restaurant not found');
 
-    const products = await Product.find({ restaurant_id: id });
+    const products = await Product.find({ restaurant_id: _id });
 
     return { restaurant, products } ;
 }
 
 export async function getRestaurantByName(name: string) {
-    return await Restaurant.find({ name: { $regex: name, $options: 'i' } });
+    return await Restaurant.find({ name: { $regex: name, $options: 'i' }, deleted_at: null });
 }
 
 export async function createRestaurant(restaurantData: restaurantSchemaType) {
@@ -48,11 +48,22 @@ export async function createRestaurant(restaurantData: restaurantSchemaType) {
 
     if (!restaurant) throw new ResourceNotFound('Restaurant not found');
 
-    Object.assign(restaurant, restaurantData);
+    Object.assign(restaurant, {
+        ...restaurantData,
+        updated_at: new Date(),
+    });
 
     return await restaurant.save();
 }
 
 export async  function deleteRestaurant(id: string) {
-    return await Restaurant.findByIdAndDelete(id);
+    const restaurant = await Restaurant.findOne({ id, deleted_at: null })
+
+    if (!restaurant) throw new ResourceNotFound('Restaurant not found');
+
+    restaurant.deleted_at = new Date();
+
+    return await restaurant.save();
 }
+
+
