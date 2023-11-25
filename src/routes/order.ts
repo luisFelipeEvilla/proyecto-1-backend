@@ -43,6 +43,12 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     const orderData = req.body;
 
+    // @ts-ignore
+    const { _id } = req.user;
+
+    // @ts-ignore
+    console.log(_id);
+
     try {
         const newOrder = await createOrder(orderData);
         return res.json(newOrder);

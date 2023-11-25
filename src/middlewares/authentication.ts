@@ -17,6 +17,7 @@ const authenticationMiddleware = (req: Request, res: Response, next: NextFunctio
 
         // @ts-ignore
         req.user = decoded;
+
         // Call the next middleware
         next();
     } catch (error) {

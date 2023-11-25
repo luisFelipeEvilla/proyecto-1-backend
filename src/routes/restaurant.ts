@@ -33,21 +33,26 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.post('/', authorizationMiddleware,  async (req, res) => {
+router.post('/', authorizationMiddleware, async (req, res) => {
     const restaurantData = req.body;
 
+    // @ts-ignore
+    const { _id } = req.user;
+
+    // @ts-ignore
+    console.log(_id);
     try {
         const newRestaurant = await createRestaurant(restaurantData);
 
         return res.json(newRestaurant);
     } catch (error: any) {
         console.error(error);
-        if (error.name === 'ResourceAlreadyExistsError')  return res.status(409).send(error.message);
+        if (error.name === 'ResourceAlreadyExistsError') return res.status(409).send(error.message);
         return res.status(500).send('Something went wrong');
     }
 });
 
-router.put('/:id', authorizationMiddleware,  async (req, res) => {
+router.put('/:id', authorizationMiddleware, async (req, res) => {
     const { id } = req.params;
 
     const restaurantData = req.body;
@@ -63,7 +68,7 @@ router.put('/:id', authorizationMiddleware,  async (req, res) => {
     }
 })
 
-router.delete('/:id', authorizationMiddleware,  async (req, res) => {
+router.delete('/:id', authorizationMiddleware, async (req, res) => {
     const { id } = req.params;
 
     try {

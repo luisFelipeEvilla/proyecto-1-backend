@@ -4,7 +4,7 @@ import { JWT_SECRET } from '../config';
 export function generateJwtToken(user: any) {
     const payload = {
         // Include user information you want to encode in the token
-        userId: user._id,
+        _id: user._id,
         email: user.email,
         role: user.role
         // Add other claims as needed
