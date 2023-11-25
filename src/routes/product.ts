@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { createProduct, deleteProduct, getProductById, getProducts, updateProduct } from "../controllers/product";
 import { ResourceAlreadyExistsError, ResourceNotFound } from "../errors";
+import authorizationMiddleware from "../middlewares/authorization";
 
 const router = Router();
 
@@ -34,7 +35,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', authorizationMiddleware, async (req, res) => {
     const productData = req.body;
 
     try {
@@ -48,7 +49,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', authorizationMiddleware, async (req, res) => {
     const { id } = req.params;
 
     const productData = req.body;
@@ -63,7 +64,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authorizationMiddleware, async (req, res) => {
     const { id } = req.params;
 
     try {

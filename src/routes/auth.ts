@@ -1,6 +1,4 @@
 import { Router } from "express";
-import User from "../models/user"
-import { comparePassword } from "../utils/comparePassword";
 import { createUser, getUserByEmail } from "../controllers/user";
 import { generateJwtToken } from "../utils/generateJwtToken";
 import { validatePassword } from "../utils/auth";

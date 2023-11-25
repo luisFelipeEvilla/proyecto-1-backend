@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { createOrder, deleteOrder, getOrderById, getOrders, updateOrder } from "../controllers/order";
+import authorizationMiddleware from "../middlewares/authorization";
 
 const router = Router();
 
@@ -52,7 +53,8 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.put(('/:id'), async (req, res) => {
+// para simplificar la app, solo el admin puede actualizar y eliminar ordenes
+router.put('/:id', authorizationMiddleware, async (req, res) => {
     const { id } = req.params;
 
     const orderData = req.body;
@@ -68,7 +70,7 @@ router.put(('/:id'), async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authorizationMiddleware,  async (req, res) => {
     const { id } = req.params;
 
     try {

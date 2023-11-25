@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { createRestaurant, deleteRestaurant, getRestaurantById, getRestaurants, updateRestaurant } from "../controllers/restaurant";
+import authorizationMiddleware from "../middlewares/authorization";
 
 const router = Router();
 
@@ -32,7 +33,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', authorizationMiddleware,  async (req, res) => {
     const restaurantData = req.body;
 
     try {
@@ -46,7 +47,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.put(('/:id'), async (req, res) => {
+router.put('/:id', authorizationMiddleware,  async (req, res) => {
     const { id } = req.params;
 
     const restaurantData = req.body;
@@ -62,7 +63,7 @@ router.put(('/:id'), async (req, res) => {
     }
 })
 
-router.delete(('/:id'), async (req, res) => {
+router.delete('/:id', authorizationMiddleware,  async (req, res) => {
     const { id } = req.params;
 
     try {
