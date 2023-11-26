@@ -9,6 +9,15 @@ export const userSchema = new Schema({
     phone: { type: String, required: true},
     address: { type: String, required: true},
     city: { type: String, required: true},
+    twofa: { 
+        type: {
+		    secret: String,
+		    url: String,
+		    qr: String,
+	    },
+        required: false,
+        default: ''
+    },
     postal_code: { type: String, required: true},
     role: { 
         type: String, 
